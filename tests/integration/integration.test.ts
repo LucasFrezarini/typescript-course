@@ -93,9 +93,7 @@ describe("Testes de Integração", () => {
         .send(usuario)
         .end((error, res) => {
           expect(res.status).to.be.equal(HTTPStatus.OK);
-          expect(res.body.payload.id).to.eql(id);
-          expect(res.body.payload.name).to.eql(usuario.name);
-          expect(res.body.payload.email).to.eql(usuario.email);
+          expect(res.body.payload[0]).to.eql(1);
           done(error);
         });
     });
@@ -107,7 +105,7 @@ describe("Testes de Integração", () => {
         .delete(`/api/users/${id}`)
         .end((error, res) => {
           expect(res.status).to.be.equal(HTTPStatus.OK);
-          expect(res.body.payload.id).to.be.equal(id);
+          expect(res.body.payload).to.be.equal(1);
           done(error);
         });
     });

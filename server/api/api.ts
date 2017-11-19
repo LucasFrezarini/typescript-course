@@ -8,6 +8,7 @@ import { errorHandlerApi }  from "./errorHandlerApi";
 class Api {
 
   public express : Application;
+  public auth;
 
   constructor() {
     this.express = express();
@@ -23,7 +24,7 @@ class Api {
   }
 
   private routes() : void {
-    new Routes(this.express);
+    new Routes(this.express, this.auth);
   }
 
 }

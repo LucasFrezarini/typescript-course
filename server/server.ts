@@ -1,10 +1,8 @@
 import * as http from "http";
 import Api from './api/api';
+import models from './models/index';
 
 let config = require('./config/env/config')();
-let models = require('./models');
-
-console.log(config);
 
 models.sequelize.sync().then(() => {
   const server = http.createServer(Api);

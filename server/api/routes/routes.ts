@@ -16,7 +16,6 @@ class Routes {
     app.post('/api/users/new', this.router.create);
     app.put('/api/users/:id/edit', this.router.update);
     app.delete('/api/users/:id', this.router.destroy);
-
   }
 }
 

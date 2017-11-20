@@ -4,11 +4,13 @@ import User from "./modules/User/service";
 
 const config = require('./config/env/config')();
 
-export default function AuthConfig() {
+export interface AuthConfigType {initialize : Function, authenticate : Function};
+
+export default function AuthConfig() : AuthConfigType {
   const userService = new User();
-  let opts : StrategyOptions  = {
+  let opts  = {
     secretOrKey: config.secret,
-    jwtFromRequest: ExtractJwt.fromAuthHeader()
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt")
   }
 
   passport.use(new Strategy(opts, (jwtPayload, done) => {

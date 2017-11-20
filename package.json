@@ -20,6 +20,7 @@
   "author": "Lucas Frezarini da Silva",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
@@ -35,6 +36,7 @@
     "sequelize-cli": "^3.0.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^1.0.0",
     "@types/bluebird": "^3.5.18",
     "@types/body-parser": "^1.16.8",
     "@types/chai": "^4.0.4",

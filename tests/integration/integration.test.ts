@@ -1,3 +1,4 @@
+import * as jwt from "jwt-simple";
 import * as HTTPStatus from 'http-status';
 import { app, request, expect } from './config/helpers';
 import models from '../../server/models/index';
@@ -5,6 +6,7 @@ import models from '../../server/models/index';
 describe("Testes de Integração", () => {
 
   let config = require('../../server/config/env/config')();
+  let token;
 
   const userTest = {
     id: 100,
@@ -26,15 +28,53 @@ describe("Testes de Integração", () => {
     models.User.destroy({
       where: {}
     }).then(() => models.User.create(userDefault))
-      .then(user => models.User.create(userTest))
-      .then(() => done())
+      .then(user => {
+        token = jwt.encode({id: user.id}, config.secret);
+        return models.User.create(userTest);
+      }).then((user) => done())
       .catch((err) => done(err));
+  });
+
+  describe("POST /token", () => {
+    it("Deve gerar token quando as credenciais são válidas", done => {
+      const credentials = {
+        email: userDefault.email,
+        password: userDefault.password
+      }
+
+      request(app)
+        .post("/token")
+        .send(credentials)
+        .end((error, res) => {
+          expect(res.status).to.be.equal(HTTPStatus.OK);
+          expect(res.body.token).to.be.equal(token);
+          done(error);
+        });
+    });
+
+    it("Não deve gerar token ao passar credenciais inválidas", done => {
+      const credentials = {
+        email: "invalid@credentials.com",
+        password: "hackingintothesystem"
+      }
+
+      request(app)
+        .post("/token")
+        .send(credentials)
+        .end((error, res) => {
+          expect(res.status).to.be.equal(HTTPStatus.UNAUTHORIZED);
+          expect(res.body).to.be.empty;
+          done(error);
+        });
+    });
   });
 
   describe("GET api/users/all", () => {
     it("Deve retornar um Array com todos os usuários", done => {
       request(app)
         .get("/api/users/all")
+        .set("Content-Type", "application/json")
+        .set("Authorization", `JWT ${token}`)
         .end((error, res) => {
           expect(res.status).to.be.equal(HTTPStatus.OK);
           expect(res.body.payload).to.be.an("array");
@@ -49,6 +89,8 @@ describe("Testes de Integração", () => {
     it("Deve retornar um JSON com apenas um usuário", done => {
       request(app)
         .get(`/api/users/${userDefault.id}`)
+        .set("Content-Type", "application/json")
+        .set("Authorization", `JWT ${token}`)
         .end((error, res) => {
           expect(res.status).to.be.equal(HTTPStatus.OK);
           expect(res.body.payload.id).to.be.equal(userDefault.id);
@@ -70,6 +112,8 @@ describe("Testes de Integração", () => {
 
       request(app)
         .post("/api/users/new")
+        .set("Content-Type", "application/json")
+        .set("Authorization", `JWT ${token}`)
         .send(usuario)
         .end((error, res) => {
           expect(res.status).to.be.equal(HTTPStatus.OK);
@@ -90,6 +134,8 @@ describe("Testes de Integração", () => {
 
       request(app)
         .put(`/api/users/${id}/edit`)
+        .set("Content-Type", "application/json")
+        .set("Authorization", `JWT ${token}`)
         .send(usuario)
         .end((error, res) => {
           expect(res.status).to.be.equal(HTTPStatus.OK);
@@ -103,6 +149,8 @@ describe("Testes de Integração", () => {
     it("Deve deletar um usuário existente", done => {
       request(app)
         .delete(`/api/users/${id}`)
+        .set("Content-Type", "application/json")
+        .set("Authorization", `JWT ${token}`)
         .end((error, res) => {
           expect(res.status).to.be.equal(HTTPStatus.OK);
           expect(res.body.payload).to.be.equal(1);

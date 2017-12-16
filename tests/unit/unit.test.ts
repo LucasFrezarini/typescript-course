@@ -27,9 +27,8 @@ describe("Testes unitários da Controller", () => {
         password: "123"
       }
 
-      const userService = new User();
 
-      userService.create(newUser).then((data) => {
+      User.create(newUser).then((data) => {
         expect(data.dataValues).to.have.all.keys(["createdAt", "email", "id", "name", "password", "updatedAt"]);
         expect(data.dataValues.email).to.eql(newUser.email);
         done();
@@ -44,9 +43,8 @@ describe("Testes unitários da Controller", () => {
         email: "teste@update.com"
       };
 
-      const userService = new User();
 
-      userService.update(userDefault.id, updateUser).then(data => {
+      User.update(userDefault.id, updateUser).then(data => {
         expect(data).to.be.an('array');
         expect(data[0]).to.be.equals(1);
         done();
@@ -56,8 +54,7 @@ describe("Testes unitários da Controller", () => {
 
   describe("Método GET ALL", () => {
     it("Deve trazer uma lista com todos os usuários existentes", done => {
-      const userService = new User();
-      userService.getAll().then((users) => {
+      User.getAll().then((users) => {
         expect(users).to.be.an('array');
         expect(users[0].id).to.be.equals(1);
         done();
@@ -67,8 +64,7 @@ describe("Testes unitários da Controller", () => {
 
   describe("Método getById", () => {
     it("Retornar um usuário de acordo com o ID passado", done => {
-      const userService = new User();
-      userService.getById(userDefault.id).then((data) => {
+      User.getById(userDefault.id).then((data) => {
         expect(data.id).to.be.equal(userDefault.id);
         expect(data.name).to.be.equal(userDefault.name);
         done();
@@ -78,8 +74,7 @@ describe("Testes unitários da Controller", () => {
 
   describe("Método getByEmail", () => {
     it("Retornar um usuário de acordo com o Email passado", done => {
-      const userService = new User();
-      userService.getByEmail(userDefault.email).then((data) => {
+      User.getByEmail(userDefault.email).then((data) => {
         expect(data.id).to.be.equal(userDefault.id);
         expect(data.name).to.be.equal(userDefault.name);
         done();
@@ -89,9 +84,8 @@ describe("Testes unitários da Controller", () => {
 
   describe("Método delete", () => {
     it("Deve remover um usuário", done => {
-      const userService = new User();
 
-      userService.delete(userDefault.id).then(data => {
+      User.delete(userDefault.id).then(data => {
         expect(data).to.be.equal(1);
         done();
       }).catch(err => done(err));

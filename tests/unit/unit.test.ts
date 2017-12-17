@@ -10,9 +10,9 @@ const userDefault = {
 }
 
 beforeEach(done => {
-  models.User.destroy({
+  models.sequelize.sync().then(() => models.User.destroy({
     where: {}
-  }).then(() => models.User.create(userDefault))
+  })).then(() => models.User.create(userDefault))
     .then(() => done())
     .catch((err) => done(err));
 });
@@ -56,7 +56,6 @@ describe("Testes unitários da Controller", () => {
     it("Deve trazer uma lista com todos os usuários existentes", done => {
       User.getAll().then((users) => {
         expect(users).to.be.an('array');
-        expect(users[0].id).to.be.equals(1);
         done();
       }).catch(err => done(err));
     });

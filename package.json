@@ -5,9 +5,9 @@
   "main": "server/server.ts",
   "scripts": {
     "start": "NODE_ENV=development ./node_modules/.bin/ts-node ./server/server.ts",
-    "builded": "NODE_ENV=production node ./build/server/server.js",
-    "unit-test": "NODE_ENV=test mocha --opts build/tests/unit/config/mocha.opts ./build/tests/unit/unit.test.js --exit",
-    "integration-test": "NODE_ENV=test mocha --opts build/tests/integration/config/mocha.opts ./build/tests/integration/integration.test.js --exit",
+    "builded": "NODE_ENV=production node ./dist/server/server.js",
+    "unit-test": "NODE_ENV=test mocha --opts dist/tests/unit/config/mocha.opts ./dist/tests/unit/unit.test.js --exit",
+    "integration-test": "NODE_ENV=test mocha --opts dist/tests/integration/config/mocha.opts ./dist/tests/integration/integration.test.js --exit",
     "unit-coverage": "nyc --reporter=html npm run unit-test",
     "integration-coverage": "nyc --reporter=html npm run integration-test"
   },
@@ -53,6 +53,9 @@
     "@types/sequelize": "^4.0.79",
     "@types/supertest": "^2.0.3",
     "chai": "^4.1.2",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-typescript": "^3.2.3",
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
     "nyc": "^11.3.0",
